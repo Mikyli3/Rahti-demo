@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>My public IP is</h3>
+
+    <script>
+       const apiUrl = "http://localhost:8080/api/ip";
+
+       async function getIP() {
+        const res = await fetch(apiUrl);
+        const data = await res.json();
+        
+        console.log(data);
+        document.getElementById("ip").textContent = data;
+       }
+
+    </script>
+    
+</body>
+</html>

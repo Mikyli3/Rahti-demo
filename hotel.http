@@ -1,0 +1,10 @@
+@apiUrl = http://127.0.0.1:8000
+
+### Get rooms
+GET {{apiUrl}}/rooms
+
+### Get docs page
+GET {{apiUrl}}/docs
+
+### Get IP JSON
+GET {{apiUrl}}/api/ip
