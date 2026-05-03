@@ -31,6 +31,21 @@ def init_db():
     );
     """)
 
+    # sample data
+    cur.execute("""
+    INSERT INTO hotel_rooms (room_number, type, price)
+    VALUES (101, 'Single', 89.00)
+    ON CONFLICT DO NOTHING;
+
+    INSERT INTO hotel_rooms (room_number, type, price)
+    VALUES (102, 'Double', 129.00)
+    ON CONFLICT DO NOTHING;
+
+    INSERT INTO hotel_guests (firstname, lastname, address)
+    VALUES ('Mikael', 'Ylirotu', 'Helsinki')
+    ON CONFLICT DO NOTHING;
+    """)
+
     conn.commit()
     cur.close()
     conn.close()

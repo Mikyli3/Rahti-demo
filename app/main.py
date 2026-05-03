@@ -2,6 +2,9 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 
+from db import get_db_connection
+from init_db import init_db
+
 app = FastAPI()
 
 app.add_middleware(
@@ -12,31 +15,35 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-rooms = [
-    {
-        "room_number": 55,
-        "type": "single",
-        "price": 50,
-        "available": True
-    },
-    {
-        "room_number": 997,
-        "type": "double",
-        "price": 130,
-        "available": True
-    },
-    {
-        "room_number": 501,
-        "type": "suite",
-        "price": 450,
-        "available": False
-    }
-]
+@app.on_event("startup")
+def startup():
+    init_db()
 
 @app.get("/rooms")
 def get_rooms():
-    return rooms
+    conn = get_db_connection()
+    cur = conn.cursor()
 
+    cur.execute("""
+        SELECT id, room_number, type, price
+        FROM hotel_rooms
+        ORDER BY room_number;
+    """)
+
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return [
+        {
+            "id": row[0],
+            "room_number": row[1],
+            "type": row[2],
+            "price": float(row[3])
+        }
+        for row in rows
+    ]
 
 
 @app.get("/api/ip")
@@ -47,6 +54,7 @@ def get_ip(request: Request):
     else:
         ip = request.client.host
     return {"ip": ip}
+
 
 @app.get("/ip", response_class=HTMLResponse)
 def get_ip_html(request: Request):
