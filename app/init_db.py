@@ -45,6 +45,13 @@ def init_db():
     VALUES ('Mikael', 'Ylirotu', 'Helsinki')
     ON CONFLICT DO NOTHING;
     """)
+    cur.execute("""
+    INSERT INTO hotel_bookings (guest_id, room_id, datefrom, dateto, addinfo)
+    VALUES (1, 1, '2026-05-10', '2026-05-15', 'Late checkout requested')
+    ON CONFLICT DO NOTHING;
+    """)
+
+    conn.commit()
 
     conn.commit()
     cur.close()
